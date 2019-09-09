@@ -37,3 +37,8 @@
 .PDF .Page {
   border: 1px solid grey
 }
+
+.Toolbar {
+  display: flex;
+  align-items: center;
+}
