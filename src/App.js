@@ -9,16 +9,18 @@ import Toolbar from "./Toolbar"
 
 
 const CATEGORIES = ["Provider name",
+  "Account number",
   "Date of invoice",
   "Total charge",
-  "Location of consumption"]
+  "Location of consumption",
+  "Currency of invoice"]
 
-function App({ file, handlePDFchange, page, setPage, scale, setScale }) {
+function App({ file, handlePDFchange, page, setPage, scale, setScale, categories }) {
   return (
     <div className="App">
       <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"></link>
 
-      <Sidebar categories={CATEGORIES} handlePDFchange={handlePDFchange} />
+      <Sidebar categories={categories} handlePDFchange={handlePDFchange} />
       <div className="Content">
         <div className="Header">
           <Typography use="headline2">{file ? file.name : null}</Typography>
@@ -34,9 +36,10 @@ const enhance = compose(
   withState("file", "setFile", null),
   withState("page", "setPage", 1),
   withState("scale", "setScale", 1),
+  withState("categories", "setCategories",
+    CATEGORIES.map(category => ({ category: category, items: [] }))),
   withHandlers({
     handlePDFchange: ({ setFile }) => (event) => {
-
       setFile(event.target.files[0])
     }
   })

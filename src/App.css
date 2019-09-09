@@ -12,6 +12,15 @@
   flex-direction: column;
 }
 
+.Sidebar .ImportExportButtons {
+  margin: 0.5em;
+}
+
+.Sidebar .mdc-button:not(:disabled),
+.Sidebar .mdc-button {
+  color: rgb(82, 82, 82);
+}
+
 .Content {
   width: 70vw;
   background-color: rgb(246, 246, 246)
@@ -20,6 +29,7 @@
 .Content .Header {
   display: flex;
   flex-direction: row;
+  justify-content: space-between;
   margin: 0.5em;
 }
 
