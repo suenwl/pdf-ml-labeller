@@ -1,30 +1,45 @@
-import React from 'react';
+import React, { Component } from 'react';
 import '@material/list/dist/mdc.list.css';
 import '@material/button/dist/mdc.button.css';
 import { Button } from "rmwc"
 import { List, ListItem, ListItemText, ListItemPrimaryText, ListItemSecondaryText } from "rmwc"
+import { compose, withHandlers } from 'recompose';
 
-const Sidebar = ({ categories }) => (
-    <div className="Sidebar">
-        <div>
-            <Button label="Upload PDF" icon="cloud_upload" />
-            <Button label="Download labels" icon="cloud_download" />
-
-        </div>
-        <List twoLine>
-            {categories.map(category => <ListItem>
-                <ListItemText>
-                    <ListItemPrimaryText>{category}</ListItemPrimaryText>
-                    <ListItemSecondaryText></ListItemSecondaryText>
-                </ListItemText>
-            </ListItem>)
-
-            }
-
-        </List>
-    </div>
+class Sidebar extends Component {
 
 
-)
 
-export default Sidebar
+    onUploadButtonClick = (event) => {
+        this.refs.fileUploader.click();
+    }
+
+    render() {
+        return (
+            <div className="Sidebar">
+                <div>
+                    <input type="file" ref="fileUploader" name="file" onChange={this.props.handlePDFchange} style={{ display: "none" }} />
+                    <Button label="Import PDF" icon="cloud_upload" onClick={this.onUploadButtonClick} />
+                    <Button label="Download labels" icon="cloud_download" />
+
+                </div>
+                <List twoLine>
+                    {this.props.categories.map(category => <ListItem>
+                        <ListItemText>
+                            <ListItemPrimaryText>{category}</ListItemPrimaryText>
+                            <ListItemSecondaryText></ListItemSecondaryText>
+                        </ListItemText>
+                    </ListItem>)
+
+                    }
+
+                </List>
+            </div>)
+    }
+
+}
+
+const enhance = compose(withHandlers({
+
+}))
+
+export default enhance(Sidebar)
