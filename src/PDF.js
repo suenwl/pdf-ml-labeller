@@ -47,16 +47,33 @@ const enhance = compose(
           .parent()
           .height()
       };
-      console.log(newDimensions);
 
       setDimensions(newDimensions);
     }
   }),
   lifecycle({
-    componentDidUpdate({ dimensions, updateCanvasDimensions }) {
-      if (this.props.canvas) {
-        const context = this.props.canvas.getContext("2d");
-        context.strokeRect(30, 30, 100, 100);
+    componentDidUpdate({
+      canvas,
+      categories,
+      dimensions,
+      updateCanvasDimensions
+    }) {
+      if (canvas) {
+        const context = canvas.getContext("2d");
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        // Loop through all categories for our machine learning classifier
+        for (var category in categories) {
+          const categorySelections = categories[category].items;
+          // Loop through all selected areas thus far
+          for (var categorySelection in categorySelections) {
+            context.strokeRect(
+              categorySelections[categorySelection].x * canvas.width,
+              categorySelections[categorySelection].y * canvas.height,
+              categorySelections[categorySelection].width * canvas.width,
+              categorySelections[categorySelection].height * canvas.height
+            );
+          }
+        }
       }
 
       if (dimensions.width !== this.props.dimensions.width)
