@@ -8,6 +8,7 @@ pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/$
 
 const PDF = ({
   file,
+  page,
   scale,
   setCanvas,
   dimensions,
@@ -15,12 +16,12 @@ const PDF = ({
   handleMouseMove,
   handleMouseDown,
   handleMouseUp,
-  categories
+  drawingForCategory
 }) => (
   <div className="PDF">
     <Document className="Document" file={file}>
       <Page
-        pageNumber={1}
+        pageNumber={page}
         scale={scale}
         className="Page"
         onRenderSuccess={updateCanvasDimensions}
@@ -34,6 +35,7 @@ const PDF = ({
         onMouseMove={handleMouseMove}
         onMouseDown={handleMouseDown}
         onMouseUp={handleMouseUp}
+        style={{ cursor: drawingForCategory ? "crosshair" : "default" }}
       />
     </Document>
   </div>
@@ -86,7 +88,8 @@ const enhance = compose(
       canvas,
       startingPoint,
       setStartingPoint,
-      addToCategory
+      addToCategory,
+      page
     }) => event => {
       const rect = canvas.getBoundingClientRect();
       const x = event.clientX - rect.left;
@@ -99,7 +102,8 @@ const enhance = compose(
           addToCategory(drawingForCategory, {
             ...startingPoint,
             width: width,
-            height: height
+            height: height,
+            page: page
           });
         }
         setStartingPoint({ x: null, y: null });
@@ -148,12 +152,16 @@ const enhance = compose(
           // Loop through all selected areas thus far
           context.strokeStyle = this.props.categories[category].color; // Change color to the category color before drawing
           for (var categorySelection in categorySelections) {
-            context.strokeRect(
-              categorySelections[categorySelection].x * canvas.width,
-              categorySelections[categorySelection].y * canvas.height,
-              categorySelections[categorySelection].width * canvas.width,
-              categorySelections[categorySelection].height * canvas.height
-            );
+            if (
+              categorySelections[categorySelection].page === this.props.page
+            ) {
+              context.strokeRect(
+                categorySelections[categorySelection].x * canvas.width,
+                categorySelections[categorySelection].y * canvas.height,
+                categorySelections[categorySelection].width * canvas.width,
+                categorySelections[categorySelection].height * canvas.height
+              );
+            }
           }
         }
       }

@@ -45,13 +45,19 @@ function App({
         <Sidebar
           categories={categories}
           handlePDFchange={handlePDFchange}
+          drawingForCategory={drawingForCategory}
           setDrawingForCategory={setDrawingForCategory}
           fileName={file ? file.name.slice(0, -4) : null}
         />
         <div className="Content">
           <div className="Header">
             <Typography use="headline2">{file ? file.name : null}</Typography>
-            <Toolbar scale={scale} setScale={setScale} />
+            <Toolbar
+              page={page}
+              setPage={setPage}
+              scale={scale}
+              setScale={setScale}
+            />
           </div>
           <PDF
             file={file}
@@ -82,6 +88,7 @@ const enhance = compose(
   withState("categories", "setCategories", defaultCategories),
   withHandlers({
     handlePDFchange: ({ setFile }) => event => {
+      console.log(event.target.files[0]);
       setFile(event.target.files[0]);
     },
     addToCategory: ({ setCategories, categories }) => (

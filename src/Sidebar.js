@@ -34,6 +34,7 @@ class Sidebar extends Component {
         </div>
         <Categories
           categories={this.props.categories}
+          drawingForCategory={this.props.drawingForCategory}
           setDrawingForCategory={this.props.setDrawingForCategory}
         />
       </div>

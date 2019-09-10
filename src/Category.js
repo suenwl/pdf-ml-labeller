@@ -9,10 +9,16 @@ import { Card } from "rmwc";
 import { Typography, ListDivider } from "rmwc";
 import { ChipSet, Chip } from "rmwc";
 
-const Category = ({ data, setDrawingForCategory }) => (
+const Category = ({ data, drawingForCategory, setDrawingForCategory }) => (
   <Card className="Category">
     <div className="Header">
-      <div className="Circle" style={{ backgroundColor: data.color }} />
+      <div
+        className="Circle"
+        style={{
+          backgroundColor: data.color,
+          border: data.category === drawingForCategory ? "1px solid black" : ""
+        }}
+      />
       <Typography
         use="subtitle1"
         style={{ padding: "0.5rem 1rem" }}
