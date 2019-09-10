@@ -36,6 +36,7 @@ class Sidebar extends Component {
           categories={this.props.categories}
           drawingForCategory={this.props.drawingForCategory}
           setDrawingForCategory={this.props.setDrawingForCategory}
+          removeSelection={this.props.removeSelection}
         />
       </div>
     );

@@ -9,7 +9,12 @@ import { Card } from "rmwc";
 import { Typography, ListDivider } from "rmwc";
 import { ChipSet, Chip } from "rmwc";
 
-const Category = ({ data, drawingForCategory, setDrawingForCategory }) => (
+const Category = ({
+  data,
+  drawingForCategory,
+  setDrawingForCategory,
+  removeSelection
+}) => (
   <Card className="Category">
     <div className="Header">
       <div
@@ -34,13 +39,16 @@ const Category = ({ data, drawingForCategory, setDrawingForCategory }) => (
     </div>
     <ListDivider />
     <ChipSet>
-      {data.items.map(item => (
-        <Chip
-          key={item.x.toString() + item.y.toString()}
-          trailingIcon="close"
-          label="Selection"
-        />
-      ))}
+      {data.items.map((item, index) => {
+        return (
+          <Chip
+            key={item.key}
+            trailingIcon="close"
+            label={index + 1}
+            onRemove={() => removeSelection(data.category, item.key)}
+          />
+        );
+      })}
     </ChipSet>
   </Card>
 );

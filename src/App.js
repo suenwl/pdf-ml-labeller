@@ -29,7 +29,8 @@ function App({
   categories,
   drawingForCategory,
   setDrawingForCategory,
-  addToCategory
+  addToCategory,
+  removeSelection
 }) {
   return (
     <body className="mdc-typography">
@@ -48,6 +49,7 @@ function App({
           drawingForCategory={drawingForCategory}
           setDrawingForCategory={setDrawingForCategory}
           fileName={file ? file.name.slice(0, -4) : null}
+          removeSelection={removeSelection}
         />
         <div className="Content">
           <div className="Header">
@@ -88,7 +90,6 @@ const enhance = compose(
   withState("categories", "setCategories", defaultCategories),
   withHandlers({
     handlePDFchange: ({ setFile }) => event => {
-      console.log(event.target.files[0]);
       setFile(event.target.files[0]);
     },
     addToCategory: ({ setCategories, categories }) => (
@@ -102,6 +103,18 @@ const enhance = compose(
         {
           ...categoryBeingAddedTo,
           items: categoryBeingAddedTo.items.concat([rectangle])
+        },
+        ...categories.filter(category => category.category !== categoryName)
+      ]);
+    },
+    removeSelection: ({ setCategories, categories }) => (categoryName, key) => {
+      const relevantCategory = categories.filter(
+        category => category.category === categoryName
+      )[0];
+      setCategories([
+        {
+          ...relevantCategory,
+          items: relevantCategory.items.filter(item => item.key !== key)
         },
         ...categories.filter(category => category.category !== categoryName)
       ]);

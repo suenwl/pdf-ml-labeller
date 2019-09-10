@@ -5,7 +5,8 @@ import Category from "./Category";
 const Categories = ({
   categories,
   drawingForCategory,
-  setDrawingForCategory
+  setDrawingForCategory,
+  removeSelection
 }) => (
   <div className="Categories">
     {categories.map(category => (
@@ -14,6 +15,7 @@ const Categories = ({
         key={category.category}
         drawingForCategory={drawingForCategory}
         setDrawingForCategory={setDrawingForCategory}
+        removeSelection={removeSelection}
       />
     ))}
   </div>

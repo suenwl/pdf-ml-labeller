@@ -103,7 +103,14 @@ const enhance = compose(
             ...startingPoint,
             width: width,
             height: height,
-            page: page
+            page: page,
+            key:
+              Math.random()
+                .toString(36)
+                .substring(2, 15) +
+              Math.random()
+                .toString(36)
+                .substring(2, 15)
           });
         }
         setStartingPoint({ x: null, y: null });
