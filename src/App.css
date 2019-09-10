@@ -33,21 +33,6 @@
   margin: 0.5em;
 }
 
-.PDF {
-  width: 70vw;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-}
-
-.PDF .Document {
-  display: flex;
-}
-
-.PDF .Page {
-  border: 1px solid grey
-}
-
 .Toolbar {
   display: flex;
   align-items: center;

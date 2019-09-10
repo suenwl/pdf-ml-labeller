@@ -26,7 +26,12 @@ function App({ file, handlePDFchange, page, setPage, scale, setScale, categories
           <Typography use="headline2">{file ? file.name : null}</Typography>
           <Toolbar scale={scale} setScale={setScale} />
         </div>
-        <PDF file={file} scale={scale} page={page} setPage={setPage} />
+        <PDF
+          file={file}
+          scale={scale}
+          page={page}
+          setPage={setPage}
+          categories={categories} />
       </div>
     </div>
   );

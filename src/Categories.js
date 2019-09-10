@@ -5,7 +5,7 @@ import Category from "./Category"
 const Categories = ({ categories }) => (
     <div className="Categories">
         {categories.map(category => (
-            <Category data={category} />
+            <Category data={category} key={category.category} />
         )
         )}
     </div>
