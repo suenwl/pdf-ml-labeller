@@ -6,7 +6,7 @@ import { Typography } from "rmwc";
 import Sidebar from "./Sidebar";
 import PDF from "./PDF";
 import Toolbar from "./Toolbar";
-import randomColor from "randomcolor";
+import randomColor from "random-color";
 
 const CATEGORIES = [
   "Provider name",
@@ -17,10 +17,7 @@ const CATEGORIES = [
   "Currency of invoice"
 ];
 
-const colors = randomColor({
-  count: CATEGORIES.length,
-  luminosity: "dark"
-});
+const colors = CATEGORIES.map(() => randomColor(0.6, 0.99).hexString());
 
 function App({
   file,

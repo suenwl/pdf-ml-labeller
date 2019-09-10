@@ -126,6 +126,9 @@ const enhance = compose(
         context.clearRect(0, 0, canvas.width, canvas.height);
 
         if (drawing) {
+          context.strokeStyle = this.props.categories.filter(
+            cat => cat.category === this.props.drawingForCategory
+          )[0].color;
           context.strokeRect(
             startingPoint.x * canvas.width,
             startingPoint.y * canvas.height,
@@ -138,6 +141,7 @@ const enhance = compose(
         for (var category in this.props.categories) {
           const categorySelections = this.props.categories[category].items;
           // Loop through all selected areas thus far
+          context.strokeStyle = this.props.categories[category].color; // Change color to the category color before drawing
           for (var categorySelection in categorySelections) {
             context.strokeRect(
               categorySelections[categorySelection].x * canvas.width,
