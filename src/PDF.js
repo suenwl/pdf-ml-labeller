@@ -19,7 +19,11 @@ const PDF = ({
   drawingForCategory
 }) => (
   <div className="PDF">
-    <Document className="Document" file={file}>
+    <Document
+      className="Document"
+      file={file}
+      noData="Import a PDF file to begin"
+    >
       <Page
         pageNumber={page}
         scale={scale}

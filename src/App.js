@@ -9,11 +9,12 @@ import Toolbar from "./Toolbar";
 import randomColor from "random-color";
 
 const CATEGORIES = [
-  "Provider name",
+  "Name of provider",
   "Account number",
   "Date of invoice",
-  "Total charge",
-  "Location of consumption",
+  "Amount (excluding GST)",
+  "Amount (including GST)",
+  "Country of consumption",
   "Currency of invoice"
 ];
 
