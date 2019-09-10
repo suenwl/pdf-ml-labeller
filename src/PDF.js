@@ -12,6 +12,7 @@ const PDF = ({
   setCanvas,
   dimensions,
   updateCanvasDimensions,
+  handleMouseMove,
   handleMouseDown,
   handleMouseUp,
   categories
@@ -30,7 +31,7 @@ const PDF = ({
         width={dimensions.width}
         height={dimensions.height}
         ref={setCanvas}
-        onMouseMove={null}
+        onMouseMove={handleMouseMove}
         onMouseDown={handleMouseDown}
         onMouseUp={handleMouseUp}
       />
@@ -42,25 +43,30 @@ const enhance = compose(
   withState("canvas", "setCanvas", null),
   withState("dimensions", "setDimensions", { width: null, height: null }),
   withState("drawing", "setDrawing", false),
-  withState("currentSelection", "setCurrentSelection", {
+  withState("startingPoint", "setStartingPoint", {
     x: null,
-    y: null,
-    width: null,
-    height: null
+    y: null
+  }),
+  withState("lastKnownPoint", "setLastKnownPoint", {
+    x: null,
+    y: null
   }),
   withHandlers({
-    handleMouseMove: ({
-      drawing,
-      currentSelection,
-      setCurrentSelection
-    }) => event => {
+    handleMouseMove: ({ drawing, setLastKnownPoint, canvas }) => event => {
       if (drawing) {
+        const rect = canvas.getBoundingClientRect();
+        const x = event.clientX - rect.left;
+        const y = event.clientY - rect.top;
+        setLastKnownPoint({
+          x: x / canvas.width,
+          y: y / canvas.height
+        });
       }
     },
     handleMouseDown: ({
       setDrawing,
       drawingForCategory,
-      setCurrentSelection,
+      setStartingPoint,
       canvas
     }) => event => {
       const rect = canvas.getBoundingClientRect();
@@ -68,7 +74,7 @@ const enhance = compose(
       const y = event.clientY - rect.top;
       if (drawingForCategory) {
         setDrawing(true);
-        setCurrentSelection({
+        setStartingPoint({
           x: x / canvas.width,
           y: y / canvas.height
         });
@@ -78,7 +84,7 @@ const enhance = compose(
       setDrawing,
       drawingForCategory,
       canvas,
-      currentSelection,
+      startingPoint,
       addToCategory
     }) => event => {
       const rect = canvas.getBoundingClientRect();
@@ -87,9 +93,9 @@ const enhance = compose(
       if (drawingForCategory) {
         setDrawing(false);
         addToCategory(drawingForCategory, {
-          ...currentSelection,
-          width: Math.abs(x / canvas.width - currentSelection.x),
-          height: Math.abs(y / canvas.height - currentSelection.y)
+          ...startingPoint,
+          width: Math.abs(x / canvas.width - startingPoint.x),
+          height: Math.abs(y / canvas.height - startingPoint.y)
         });
       }
     },
@@ -107,10 +113,27 @@ const enhance = compose(
     }
   }),
   lifecycle({
-    componentDidUpdate({ canvas, dimensions, updateCanvasDimensions }) {
+    componentDidUpdate({
+      drawing,
+      canvas,
+      dimensions,
+      updateCanvasDimensions,
+      lastKnownPoint,
+      startingPoint
+    }) {
       if (canvas) {
         const context = canvas.getContext("2d");
         context.clearRect(0, 0, canvas.width, canvas.height);
+
+        if (drawing) {
+          context.strokeRect(
+            startingPoint.x * canvas.width,
+            startingPoint.y * canvas.height,
+            (lastKnownPoint.x - startingPoint.x) * canvas.width,
+            (lastKnownPoint.y - startingPoint.y) * canvas.height
+          );
+        }
+
         // Loop through all categories for our machine learning classifier
         for (var category in this.props.categories) {
           const categorySelections = this.props.categories[category].items;
