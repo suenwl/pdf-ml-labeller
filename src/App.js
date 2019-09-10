@@ -6,6 +6,7 @@ import { Typography } from "rmwc";
 import Sidebar from "./Sidebar";
 import PDF from "./PDF";
 import Toolbar from "./Toolbar";
+import randomColor from "randomcolor";
 
 const CATEGORIES = [
   "Provider name",
@@ -15,6 +16,11 @@ const CATEGORIES = [
   "Location of consumption",
   "Currency of invoice"
 ];
+
+const colors = randomColor({
+  count: CATEGORIES.length,
+  luminosity: "dark"
+});
 
 function App({
   file,
@@ -73,8 +79,9 @@ const enhance = compose(
   withState(
     "categories",
     "setCategories",
-    CATEGORIES.map(category => ({
+    CATEGORIES.map((category, index) => ({
       category: category,
+      color: colors[index],
       items: []
     }))
   ),

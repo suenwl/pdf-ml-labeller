@@ -12,6 +12,7 @@ import { ChipSet, Chip } from "rmwc";
 const Category = ({ data, setDrawingForCategory }) => (
   <Card className="Category">
     <div className="Header">
+      <div className="Circle" style={{ backgroundColor: data.color }} />
       <Typography
         use="subtitle1"
         style={{ padding: "0.5rem 1rem" }}
