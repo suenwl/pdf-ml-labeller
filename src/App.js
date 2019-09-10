@@ -43,6 +43,7 @@ function App({
           categories={categories}
           handlePDFchange={handlePDFchange}
           setDrawingForCategory={setDrawingForCategory}
+          fileName={file ? file.name.slice(0, -4) : null}
         />
         <div className="Content">
           <div className="Header">

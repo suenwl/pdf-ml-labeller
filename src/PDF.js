@@ -107,18 +107,13 @@ const enhance = compose(
     }
   }),
   lifecycle({
-    componentDidUpdate({
-      canvas,
-      categories,
-      dimensions,
-      updateCanvasDimensions
-    }) {
+    componentDidUpdate({ canvas, dimensions, updateCanvasDimensions }) {
       if (canvas) {
         const context = canvas.getContext("2d");
         context.clearRect(0, 0, canvas.width, canvas.height);
         // Loop through all categories for our machine learning classifier
-        for (var category in categories) {
-          const categorySelections = categories[category].items;
+        for (var category in this.props.categories) {
+          const categorySelections = this.props.categories[category].items;
           // Loop through all selected areas thus far
           for (var categorySelection in categorySelections) {
             context.strokeRect(

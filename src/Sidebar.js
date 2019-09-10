@@ -25,7 +25,12 @@ class Sidebar extends Component {
             icon="cloud_upload"
             onClick={this.onUploadButtonClick}
           />
-          <Button label="Download labels" icon="save_alt" />
+          <Button
+            label="Download labels"
+            icon="save_alt"
+            onClick={this.props.handleDownload}
+            disabled={!this.props.fileName}
+          />
         </div>
         <Categories
           categories={this.props.categories}
@@ -36,6 +41,25 @@ class Sidebar extends Component {
   }
 }
 
-const enhance = compose(withHandlers({}));
+const enhance = compose(
+  withHandlers({
+    handleDownload: ({ categories, fileName }) => () => {
+      var element = document.createElement("a");
+      element.setAttribute(
+        "href",
+        "data:text/plain;charset=utf-8," +
+          encodeURIComponent(JSON.stringify(categories))
+      );
+      element.setAttribute("download", fileName + ".json");
+
+      element.style.display = "none";
+      document.body.appendChild(element);
+
+      element.click();
+
+      document.body.removeChild(element);
+    }
+  })
+);
 
 export default enhance(Sidebar);

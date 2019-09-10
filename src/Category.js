@@ -28,7 +28,11 @@ const Category = ({ data, setDrawingForCategory }) => (
     <ListDivider />
     <ChipSet>
       {data.items.map(item => (
-        <Chip key={item} trailingIcon="close" label="Selection" />
+        <Chip
+          key={item.x.toString() + item.y.toString()}
+          trailingIcon="close"
+          label="Selection"
+        />
       ))}
     </ChipSet>
   </Card>
