@@ -85,6 +85,7 @@ const enhance = compose(
       drawingForCategory,
       canvas,
       startingPoint,
+      setStartingPoint,
       addToCategory
     }) => event => {
       const rect = canvas.getBoundingClientRect();
@@ -92,11 +93,16 @@ const enhance = compose(
       const y = event.clientY - rect.top;
       if (drawingForCategory) {
         setDrawing(false);
-        addToCategory(drawingForCategory, {
-          ...startingPoint,
-          width: Math.abs(x / canvas.width - startingPoint.x),
-          height: Math.abs(y / canvas.height - startingPoint.y)
-        });
+        const width = x / canvas.width - startingPoint.x;
+        const height = y / canvas.height - startingPoint.y;
+        if (width > 0 && height > 0) {
+          addToCategory(drawingForCategory, {
+            ...startingPoint,
+            width: width,
+            height: height
+          });
+        }
+        setStartingPoint({ x: null, y: null });
       }
     },
     updateCanvasDimensions: ({ setDimensions }) => () => {
@@ -114,7 +120,6 @@ const enhance = compose(
   }),
   lifecycle({
     componentDidUpdate({
-      drawing,
       canvas,
       dimensions,
       updateCanvasDimensions,
@@ -125,7 +130,7 @@ const enhance = compose(
         const context = canvas.getContext("2d");
         context.clearRect(0, 0, canvas.width, canvas.height);
 
-        if (drawing) {
+        if (this.props.drawing) {
           context.strokeStyle = this.props.categories.filter(
             cat => cat.category === this.props.drawingForCategory
           )[0].color;

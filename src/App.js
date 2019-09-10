@@ -1,7 +1,7 @@
 import React from "react";
 import "./App.css";
 import "@material/typography/dist/mdc.typography.css";
-import { withState, compose, withHandlers } from "recompose";
+import { withState, compose, withHandlers, lifecycle } from "recompose";
 import { Typography } from "rmwc";
 import Sidebar from "./Sidebar";
 import PDF from "./PDF";
@@ -68,20 +68,18 @@ function App({
   );
 }
 
+const defaultCategories = CATEGORIES.map((category, index) => ({
+  category: category,
+  color: colors[index],
+  items: []
+}));
+
 const enhance = compose(
   withState("file", "setFile", null),
   withState("page", "setPage", 1),
   withState("scale", "setScale", 1),
   withState("drawingForCategory", "setDrawingForCategory", null),
-  withState(
-    "categories",
-    "setCategories",
-    CATEGORIES.map((category, index) => ({
-      category: category,
-      color: colors[index],
-      items: []
-    }))
-  ),
+  withState("categories", "setCategories", defaultCategories),
   withHandlers({
     handlePDFchange: ({ setFile }) => event => {
       setFile(event.target.files[0]);
@@ -100,6 +98,14 @@ const enhance = compose(
         },
         ...categories.filter(category => category.category !== categoryName)
       ]);
+    }
+  }),
+  lifecycle({
+    componentDidUpdate({ file }) {
+      if (file !== this.props.file) {
+        this.props.setPage(1);
+        this.props.setCategories(defaultCategories);
+      }
     }
   })
 );
