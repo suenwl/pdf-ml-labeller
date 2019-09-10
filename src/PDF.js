@@ -11,7 +11,10 @@ const PDF = ({
   scale,
   setCanvas,
   dimensions,
-  updateCanvasDimensions
+  updateCanvasDimensions,
+  handleMouseDown,
+  handleMouseUp,
+  categories
 }) => (
   <div className="PDF">
     <Document className="Document" file={file}>
@@ -21,15 +24,16 @@ const PDF = ({
         className="Page"
         onRenderSuccess={updateCanvasDimensions}
       />
-      {file ? (
-        <canvas
-          id="Canvas"
-          className="Canvas"
-          width={dimensions.width}
-          height={dimensions.height}
-          ref={setCanvas}
-        />
-      ) : null}
+      <canvas
+        id="Canvas"
+        className="Canvas"
+        width={dimensions.width}
+        height={dimensions.height}
+        ref={setCanvas}
+        onMouseMove={null}
+        onMouseDown={handleMouseDown}
+        onMouseUp={handleMouseUp}
+      />
     </Document>
   </div>
 );
@@ -37,7 +41,58 @@ const PDF = ({
 const enhance = compose(
   withState("canvas", "setCanvas", null),
   withState("dimensions", "setDimensions", { width: null, height: null }),
+  withState("drawing", "setDrawing", false),
+  withState("currentSelection", "setCurrentSelection", {
+    x: null,
+    y: null,
+    width: null,
+    height: null
+  }),
   withHandlers({
+    handleMouseMove: ({
+      drawing,
+      currentSelection,
+      setCurrentSelection
+    }) => event => {
+      if (drawing) {
+      }
+    },
+    handleMouseDown: ({
+      setDrawing,
+      drawingForCategory,
+      setCurrentSelection,
+      canvas
+    }) => event => {
+      const rect = canvas.getBoundingClientRect();
+      const x = event.clientX - rect.left;
+      const y = event.clientY - rect.top;
+      if (drawingForCategory) {
+        setDrawing(true);
+        setCurrentSelection({
+          x: x / canvas.width,
+          y: y / canvas.height
+        });
+      }
+    },
+    handleMouseUp: ({
+      setDrawing,
+      drawingForCategory,
+      canvas,
+      currentSelection,
+      addToCategory
+    }) => event => {
+      const rect = canvas.getBoundingClientRect();
+      const x = event.clientX - rect.left;
+      const y = event.clientY - rect.top;
+      if (drawingForCategory) {
+        setDrawing(false);
+        addToCategory(drawingForCategory, {
+          ...currentSelection,
+          width: Math.abs(x / canvas.width - currentSelection.x),
+          height: Math.abs(y / canvas.height - currentSelection.y)
+        });
+      }
+    },
     updateCanvasDimensions: ({ setDimensions }) => () => {
       const newDimensions = {
         width: $("#Canvas")

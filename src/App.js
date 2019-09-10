@@ -23,30 +23,44 @@ function App({
   setPage,
   scale,
   setScale,
-  categories
+  categories,
+  drawingForCategory,
+  setDrawingForCategory,
+  addToCategory
 }) {
   return (
-    <div className="App">
+    <body className="mdc-typography">
       <link
         href="https://fonts.googleapis.com/icon?family=Material+Icons"
         rel="stylesheet"
       ></link>
-
-      <Sidebar categories={categories} handlePDFchange={handlePDFchange} />
-      <div className="Content">
-        <div className="Header">
-          <Typography use="headline2">{file ? file.name : null}</Typography>
-          <Toolbar scale={scale} setScale={setScale} />
-        </div>
-        <PDF
-          file={file}
-          scale={scale}
-          page={page}
-          setPage={setPage}
+      <link
+        href="https://fonts.googleapis.com/css?family=Roboto:300,400,500"
+        rel="stylesheet"
+      />
+      <div className="App">
+        <Sidebar
           categories={categories}
+          handlePDFchange={handlePDFchange}
+          setDrawingForCategory={setDrawingForCategory}
         />
+        <div className="Content">
+          <div className="Header">
+            <Typography use="headline2">{file ? file.name : null}</Typography>
+            <Toolbar scale={scale} setScale={setScale} />
+          </div>
+          <PDF
+            file={file}
+            scale={scale}
+            page={page}
+            setPage={setPage}
+            categories={categories}
+            drawingForCategory={drawingForCategory}
+            addToCategory={addToCategory}
+          />
+        </div>
       </div>
-    </div>
+    </body>
   );
 }
 
@@ -54,17 +68,33 @@ const enhance = compose(
   withState("file", "setFile", null),
   withState("page", "setPage", 1),
   withState("scale", "setScale", 1),
+  withState("drawingForCategory", "setDrawingForCategory", null),
   withState(
     "categories",
     "setCategories",
     CATEGORIES.map(category => ({
       category: category,
-      items: [{ x: 0.1, y: 0.1, width: 0.3, height: 0.85 }]
+      items: []
     }))
   ),
   withHandlers({
     handlePDFchange: ({ setFile }) => event => {
       setFile(event.target.files[0]);
+    },
+    addToCategory: ({ setCategories, categories }) => (
+      categoryName,
+      rectangle
+    ) => {
+      const categoryBeingAddedTo = categories.filter(
+        category => category.category === categoryName
+      )[0];
+      setCategories([
+        {
+          ...categoryBeingAddedTo,
+          items: categoryBeingAddedTo.items.concat([rectangle])
+        },
+        ...categories.filter(category => category.category !== categoryName)
+      ]);
     }
   })
 );
