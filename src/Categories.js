@@ -9,15 +9,17 @@ const Categories = ({
   removeSelection
 }) => (
   <div className="Categories">
-    {categories.map(category => (
-      <Category
-        data={category}
-        key={category.category}
-        drawingForCategory={drawingForCategory}
-        setDrawingForCategory={setDrawingForCategory}
-        removeSelection={removeSelection}
-      />
-    ))}
+    {categories
+      .sort((a, b) => (a.category > b.category ? 1 : -1))
+      .map(category => (
+        <Category
+          data={category}
+          key={category.category}
+          drawingForCategory={drawingForCategory}
+          setDrawingForCategory={setDrawingForCategory}
+          removeSelection={removeSelection}
+        />
+      ))}
   </div>
 );
 

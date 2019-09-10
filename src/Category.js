@@ -44,7 +44,7 @@ const Category = ({
           <Chip
             key={item.key}
             trailingIcon="close"
-            label={index + 1}
+            label={"Token " + (index + 1).toString()}
             onRemove={() => removeSelection(data.category, item.key)}
           />
         );
