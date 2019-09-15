@@ -16,7 +16,8 @@ const CATEGORIES = [
   "Amount (including GST)",
   "Country of consumption",
   "Currency of invoice",
-  "PO Number"
+  "PO Number",
+  "Consumption period"
 ];
 
 const colors = CATEGORIES.map(() => randomColor(0.6, 0.99).hexString());
