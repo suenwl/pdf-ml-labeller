@@ -6,7 +6,7 @@
 }
 
 .Sidebar {
-  width: 30vw;
+  width: 470px;
   height: 100vh;
   display: flex;
   flex-direction: column;
@@ -22,7 +22,7 @@
 }
 
 .Content {
-  width: 70vw;
+  width: 100%;
   background-color: rgb(246, 246, 246)
 }
 
