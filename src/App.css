@@ -23,7 +23,7 @@
 
 .Content {
   width: 100%;
-  background-color: rgb(246, 246, 246)
+  background-color: rgb(246, 246, 246);
 }
 
 .Content .Header {
@@ -34,6 +34,9 @@
 }
 
 .Toolbar {
+  position: absolute;
+  right: 0;
+  top: 0.7em;
   display: flex;
   align-items: center;
 }
