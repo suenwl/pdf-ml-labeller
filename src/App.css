@@ -45,3 +45,17 @@
   display: flex;
   align-items: center;
 }
+
+.PageInput {
+  width: 30px;
+  background: none;
+  border: none;
+  font-size: 1.2em;
+  text-align: center;
+
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  display: none;
+}

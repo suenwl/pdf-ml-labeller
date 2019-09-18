@@ -8,6 +8,8 @@ import PDF from "./PDF";
 import Toolbar from "./Toolbar";
 import randomColor from "random-color";
 
+import { pdfjs } from "react-pdf";
+
 const CATEGORIES = [
   "Name of provider",
   "Account number",
@@ -26,6 +28,7 @@ function App({
   file,
   handlePDFchange,
   page,
+  maxPage,
   setPage,
   scale,
   setScale,
@@ -60,7 +63,9 @@ function App({
           <div className="Header">
             <Typography use="headline2">{file ? file.name : null}</Typography>
             <Toolbar
+              file={file}
               page={page}
+              maxPage={maxPage}
               setPage={setPage}
               scale={scale}
               setScale={setScale}
@@ -90,6 +95,7 @@ const defaultCategories = CATEGORIES.map((category, index) => ({
 const enhance = compose(
   withState("file", "setFile", null),
   withState("page", "setPage", 1),
+  withState("maxPage", "setMaxPage", null),
   withState("scale", "setScale", 1),
   withState("drawingForCategory", "setDrawingForCategory", null),
   withState("categories", "setCategories", defaultCategories),
@@ -123,11 +129,23 @@ const enhance = compose(
         },
         ...categories.filter(category => category.category !== categoryName)
       ]);
+    },
+    updateMaxPage: ({ setMaxPage }) => file => {
+      if (file) {
+        const reader = new FileReader();
+        reader.readAsArrayBuffer(file);
+        reader.onload = () => {
+          pdfjs
+            .getDocument(new Uint8Array(reader.result))
+            .then(pdf => setMaxPage(pdf.numPages));
+        };
+      }
     }
   }),
   lifecycle({
-    componentDidUpdate({ file }) {
+    componentDidUpdate({ file, updateMaxPage }) {
       if (file !== this.props.file) {
+        updateMaxPage(this.props.file);
         this.props.setPage(1);
         this.props.setCategories(defaultCategories);
       }
