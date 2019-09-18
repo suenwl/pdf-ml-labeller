@@ -5,8 +5,12 @@ import { compose, withHandlers } from "recompose";
 import Categories from "./Categories";
 
 class Sidebar extends Component {
-  onUploadButtonClick = event => {
-    this.refs.fileUploader.click();
+  onUploadPdfButtonClick = event => {
+    this.refs.pdfFileUploader.click();
+  };
+
+  onUploadJsonButtonClick = event => {
+    this.refs.jsonFileUploader.click();
   };
 
   render() {
@@ -15,20 +19,35 @@ class Sidebar extends Component {
         <div className="ImportExportButtons">
           <input
             type="file"
-            ref="fileUploader"
-            name="file"
+            ref="pdfFileUploader"
+            name="pdfFile"
             onChange={this.props.handlePDFchange}
             style={{ display: "none" }}
           />
+
+          <input
+            type="file"
+            ref="jsonFileUploader"
+            name="jsonFile"
+            onChange={this.props.handleJsonUpload}
+            style={{ display: "none" }}
+          />
+
           <Button
             label="Import PDF"
             icon="cloud_upload"
-            onClick={this.onUploadButtonClick}
+            onClick={this.onUploadPdfButtonClick}
           />
           <Button
             label="Download labels"
             icon="save_alt"
             onClick={this.props.handleDownload}
+            disabled={!this.props.fileName}
+          />
+          <Button
+            label="Import json tags"
+            icon="subject"
+            onClick={this.onUploadJsonButtonClick}
             disabled={!this.props.fileName}
           />
         </div>
@@ -60,6 +79,13 @@ const enhance = compose(
       element.click();
 
       document.body.removeChild(element);
+    },
+    handleJsonUpload: ({ setCategories }) => async event => {
+      const fileReader = new FileReader();
+      fileReader.readAsText(event.target.files[0]);
+      fileReader.onload = () => {
+        setCategories(JSON.parse(fileReader.result));
+      };
     }
   })
 );

@@ -30,6 +30,7 @@ function App({
   scale,
   setScale,
   categories,
+  setCategories,
   drawingForCategory,
   setDrawingForCategory,
   addToCategory,
@@ -53,6 +54,7 @@ function App({
           setDrawingForCategory={setDrawingForCategory}
           fileName={file ? file.name.slice(0, -4) : null}
           removeSelection={removeSelection}
+          setCategories={setCategories}
         />
         <div className="Content">
           <div className="Header">
