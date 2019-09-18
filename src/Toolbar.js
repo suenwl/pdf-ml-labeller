@@ -30,7 +30,8 @@ const Toolbar = ({
           type="number"
           className="PageInput"
         />
-        /{maxPage}
+        /{"  "}
+        {maxPage}
         <IconButton icon="keyboard_arrow_right" onClick={nextPage} />
       </div>
     </div>
