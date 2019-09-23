@@ -80,11 +80,18 @@ const enhance = compose(
 
       document.body.removeChild(element);
     },
-    handleJsonUpload: ({ setCategories }) => async event => {
+    handleJsonUpload: ({ setCategories, categories }) => async event => {
       const fileReader = new FileReader();
       fileReader.readAsText(event.target.files[0]);
       fileReader.onload = () => {
-        setCategories(JSON.parse(fileReader.result));
+        const save_data = JSON.parse(fileReader.result);
+        const save_data_categories = save_data.map(
+          category => category.category
+        );
+        const missing_fields = categories.filter(
+          category => !save_data_categories.includes(category.category)
+        );
+        setCategories(save_data.concat(missing_fields));
       };
     }
   })
